@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
+# check unique arguments for models
 class Position(models.Model):
     name = models.CharField(max_length=63)
 
@@ -41,7 +42,7 @@ class TaskType(models.Model):
 class Task(models.Model):
     name = models.CharField(max_length=263)
     description = models.TextField(max_length=600)
-    deadline = models.DateTimeField()
+    deadline = models.DateTimeField(auto_now_add=True)
     is_completed = models.BooleanField()
     priority_choices = (
         ("Low", "Low"),
