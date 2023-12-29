@@ -27,7 +27,7 @@ class ModelTest(TestCase):
         task_type = TaskType.objects.create()
         obj = Task.objects.create(
             task_type=task_type,
-            is_completed=True
+            deadline="2023-09-18"
         )
         self.assertEqual(
             str(obj),
