@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 
 
 # check unique arguments for models
@@ -28,6 +29,9 @@ class Worker(AbstractUser):
     def __str__(self):
         return f"{self.username} ({self.first_name} {self.last_name})"
 
+    def get_absolute_url(self):
+        return reverse("manager:worker-detail", kwargs={"pk": self.pk})
+
 
 class TaskType(models.Model):
     name = models.CharField(max_length=263)
@@ -45,9 +49,9 @@ class Task(models.Model):
     deadline = models.DateField(blank=True, null=True)
     is_completed = models.BooleanField(default=False)
     priority_choices = (
-        (1, "Low"),
-        (2, "High"),
-        (3, "Urgent"),
+        ("Low", "Low"),
+        ("High", "High"),
+        ("Urgent", "Urgent"),
     )
     priority = models.CharField(
         max_length=63,
