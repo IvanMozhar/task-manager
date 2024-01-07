@@ -6,11 +6,14 @@ from manager.views import (
     TaskCreateView,
     TaskUpdateView,
     TaskDetailView,
+    TaskDeleteView,
     WorkerListView,
     TaskTypeListView,
     TaskTypeCreateView,
     TaskTypeDeleteView,
     TaskTypeDetailView,
+    WorkerCreateView,
+    toggle_task_completed,
 )
 
 
@@ -37,9 +40,19 @@ urlpatterns = [
         name="task-detail"
     ),
     path(
+        "tasks/<int:pk>/delete/",
+        TaskDeleteView.as_view(),
+        name="task-delete"
+    ),
+    path(
         "workers/",
         WorkerListView.as_view(),
         name="worker-list"
+    ),
+    path(
+        "workers/create/",
+        WorkerCreateView.as_view(),
+        name="worker-create"
     ),
     path(
         "task-types/",
@@ -60,7 +73,12 @@ urlpatterns = [
         "task-types/<int:pk>/delete/",
         TaskTypeDeleteView.as_view(),
         name="task-type-delete"
-    )
+    ),
+    path(
+        "tasks/<int:pk>/toggle-complete/",
+        toggle_task_completed,
+        name="task-toggle-complete",
+    ),
 ]
 
 app_name = "manager"
