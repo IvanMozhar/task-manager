@@ -1,15 +1,17 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect
 from django.template import loader
 from django.urls import reverse_lazy
 from django.views import generic
+from django.views.decorators.http import require_POST
 
-from manager.forms import TaskForm, TaskTypeForm
+from manager.forms import TaskForm, TaskTypeForm, WorkerCreationForm
 from manager.models import Task, Worker, TaskType
 
 
-@login_required
 def index(request):
     context = {'segment': 'index'}
     html_template = loader.get_template('home/index.html')
@@ -36,6 +38,11 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
 class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Task
     form_class = TaskForm
+    success_url = reverse_lazy("manager:task-list")
+
+
+class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Task
     success_url = reverse_lazy("manager:task-list")
 
 
@@ -66,3 +73,17 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
     model = Worker
     context_object_name = "worker_list"
     template_name = "manager/worker_list.html"
+
+
+class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Worker
+    form_class = WorkerCreationForm
+    success_url = reverse_lazy("manager:worker-list")
+
+
+@require_POST
+def toggle_task_completed(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    task.is_completed = not task.is_completed
+    task.save()
+    return redirect('manager:task-list')
