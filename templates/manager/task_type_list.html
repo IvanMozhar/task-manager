@@ -1,0 +1,42 @@
+{% extends "manager/base.html" %}
+
+{% block content %}
+  <h1>
+    Task types
+  </h1>
+  <a href="{% url 'manager:task-type-create' %}"
+     class="btn btn-gray-800 d-inline-flex align-items-center me-2 dropdown-toggle float-end"
+     data-bs-toggle="dropdown"
+     aria-haspopup="true" aria-expanded="false">
+    <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+         xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+    </svg>
+    New Task Type
+  </a>
+  <form action="" method="get" class="form-inline my-2 my-lg-0">
+    {% csrf_token %}
+    {{ search_form }}
+    <input type="submit" value="🔎" class="btn btn-secondary">
+  </form>
+  {% if task_type_list %}
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th>Task type</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for task_type in task_type_list %}
+        <tr class='clickable-row' data-href="{% url 'manager:task-type-detail' pk=task_type.id %}">
+          <td>
+            {{ task_type }}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>There are no task types available</p>
+  {% endif %}
+{% endblock %}
