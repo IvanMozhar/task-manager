@@ -3,9 +3,8 @@ from django.db import models
 from django.urls import reverse
 
 
-# check unique arguments for models
 class Position(models.Model):
-    name = models.CharField(max_length=63)
+    name = models.CharField(max_length=63, unique=True)
 
     class Meta:
         ordering = ["name"]
@@ -44,8 +43,8 @@ class TaskType(models.Model):
 
 
 class Task(models.Model):
-    name = models.CharField(max_length=263)
-    description = models.TextField(max_length=600)
+    name = models.CharField(max_length=263, unique=True)
+    description = models.TextField(max_length=600, blank=True, null=True)
     deadline = models.DateField(blank=True, null=True)
     is_completed = models.BooleanField(default=False)
     priority_choices = (
