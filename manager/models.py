@@ -27,7 +27,7 @@ class Worker(AbstractUser):
         verbose_name_plural = "workers"
 
     def __str__(self):
-        return f"{self.username} ({self.first_name} {self.last_name})"
+        return f"{self.username} ({self.first_name} {self.last_name}) - {self.position}"
 
     def get_absolute_url(self):
         return reverse("manager:worker-detail", kwargs={"pk": self.pk})
@@ -59,8 +59,7 @@ class Task(models.Model):
     )
     task_type = models.ForeignKey(
         TaskType,
-        on_delete=models.SET_NULL,  # by deleting task type object, task is not deleted
-        null=True,
+        on_delete=models.CASCADE,
         related_name="tasks"
     )
     assignees = models.ManyToManyField(Worker, related_name="tasks")
@@ -68,6 +67,5 @@ class Task(models.Model):
     class Meta:
         ordering = ["name"]
 
-    # check str method
     def __str__(self):
         return f"{self.name}: {self.deadline} {self.is_completed}"
