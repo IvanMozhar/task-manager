@@ -12,13 +12,19 @@ from manager.views import (
     TaskTypeCreateView,
     TaskTypeDeleteView,
     TaskTypeDetailView,
-    WorkerCreateView,
     toggle_task_completed,
+    WorkerDetailView,
+    home_page
 )
 
 
 urlpatterns = [
     path("", index, name="index"),
+    path(
+        "home/",
+        home_page,
+        name="home"
+    ),
     path(
         "tasks/",
         TaskListView.as_view(),
@@ -50,9 +56,9 @@ urlpatterns = [
         name="worker-list"
     ),
     path(
-        "workers/create/",
-        WorkerCreateView.as_view(),
-        name="worker-create"
+        "workers/<int:pk>/detail/",
+        WorkerDetailView.as_view(),
+        name="worker-detail"
     ),
     path(
         "task-types/",
