@@ -29,11 +29,43 @@ class TaskTypeForm(forms.ModelForm):
         fields = "__all__"
 
 
-class WorkerCreationForm(UserCreationForm):
-    class Meta(UserCreationForm.Meta):
-        model = Worker
-        fields = UserCreationForm.Meta.fields + (
-            "position",
-            "first_name",
-            "last_name",
+class TaskNameSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Search by name"
+            }
         )
+    )
+
+
+class TaskTypeNameSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Search by name"
+            }
+        )
+    )
+
+
+class WorkerPositionSearchForm(forms.Form):
+    first_name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Search by name"
+            }
+        )
+    )
