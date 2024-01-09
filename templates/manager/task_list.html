@@ -1,0 +1,51 @@
+{% extends "manager/base.html" %}
+
+{% block content %}
+  <h1>
+    Tasks
+  </h1>
+  <a href="{% url 'manager:task-create' %}"
+     class="btn btn-gray-800 d-inline-flex align-items-center me-2 dropdown-toggle float-right"
+     data-bs-toggle="dropdown"
+     aria-haspopup="true" aria-expanded="false">
+    <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+         xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+    </svg>
+    New Task
+  </a>
+  <form action="" method="get" class="form-inline my-2 my-lg-0">
+    {% csrf_token %}
+    {{ search_form }}
+    <input type="submit" value="🔎" class="btn btn-secondary">
+  </form>
+  {% if task_list %}
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th>Task name</th>
+        <th>Completed</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for task in task_list %}
+        <tr class='clickable-row' data-href="{% url 'manager:task-detail' pk=task.id %}">
+          <td>
+            {{ task.name }}
+          </td>
+          <td>
+            <form action="{% url 'manager:task-toggle-complete' pk=task.id %}" method="post" class="d-inline">
+              {% csrf_token %}
+              <input type="checkbox" name="is_completed" id="completed_{{ task.id }}"
+                     onchange="event.stopPropagation(); this.form.submit();" {{ task.is_completed|yesno:"checked," }}/>
+              <label for="completed_{{ task.id }}" onclick="event.stopPropagation();">Mark as completed</label>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>There are no tasks available</p>
+  {% endif %}
+{% endblock %}
