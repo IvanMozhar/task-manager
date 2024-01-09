@@ -1,0 +1,92 @@
+{% extends "manager/base.html" %}
+
+{% block content %}
+  <h1>Hello, {{ request.user.username }}</h1>
+  <div class="py-4">
+    <div class="dropdown">
+      <a href="{% url 'manager:task-create' %}" class="btn btn-gray-800 d-inline-flex align-items-center me-2">
+        <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+             xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+        </svg>
+        New Task
+      </a>
+    </div>
+    <div class="row">
+      <div class="col-12 col-xl-8">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <div class="card border-0 shadow">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <h2 class="fs-5 fw-bold mb-0">Available tasks</h2>
+                  </div>
+                  <div class="col text-end">
+                    <a href="{% url 'manager:task-list' %}" class="btn btn-sm btn-primary">See all</a>
+                  </div>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table align-items-center table-flush">
+                  <thead class="thead-light">
+                  <tr>
+                    <th class="border-bottom" scope="col">Task</th>
+                    <th class="border-bottom" scope="col">Is completed</th>
+                  </tr>
+                  </thead>
+                  {% for task in tasks %}
+                    <tbody>
+                    <tr>
+                      <th class="text-gray-900" scope="row">
+                        <a href="{% url 'manager:task-detail' pk=task.id %}"
+                           class="text-decoration-none text-dark">
+                          {{ task.name }}
+                        </a>
+                      </th>
+                      <td class="fw-bolder text-gray-500">
+                        {% if task.is_completed %} ✔ {% else %} ❌ {% endif %}
+                      </td>
+                    </tr>
+                    </tbody>
+                  {% endfor %}
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-xxl-6 mb-4">
+            <div class="card border-0 shadow">
+              <div class="card-header border-bottom d-flex align-items-center justify-content-between">
+                <h2 class="fs-5 fw-bold mb-0">Team members</h2>
+                <a href="{% url 'manager:worker-list' %}" class="btn btn-sm btn-primary">See all</a>
+              </div>
+              <div class="card-body">
+                {% if workers %}
+                  {% for worker in workers %}
+                    <ul class="list-group list-group-flush list my--3">
+                      <li class="list-group-item px-0">
+                        <div class="row align-items-center">
+                          <div class="col-auto ms--2">
+                            <h4 class="h6 mb-0">
+                              <a href="{% url 'manager:worker-detail' pk=worker.id %}"
+                                 class="text-decoration-none text-dark">
+                                {{ worker }}
+                              </a>
+                            </h4>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  {% endfor %}
+                {% else %}
+                  There is no team members yet
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
